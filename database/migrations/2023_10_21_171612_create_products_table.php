@@ -15,7 +15,7 @@ return new class extends Migration
             $table->uuid('id_product')->primary();
             $table->string('title')->unique()->nullable(false);
             $table->integer('price')->nullable(false);
-            $table->string('description')->nullable(true);
+            $table->longText('description')->nullable(true);
             $table->string('category')->nullable(false);
             $table->string('image')->nullable(false);
             $table->integer('rate')->nullable(false);

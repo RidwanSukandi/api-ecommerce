@@ -48,14 +48,25 @@ class ProductController extends Controller
         ], 200);
     }
 
-    function get()
+    function get(Request $request)
     {
-        $product = Product::all();
 
-        foreach ($product as $product) {
+        $limit = $request->input('limit');
+        $sort = $request->input('sort');
 
-            return response()->json([
-                'data' => [
+        if ($limit) {
+            return  $products = product::limit($limit)->get();
+        } elseif ($sort) {
+            return  $products = product::orderBy('title', $sort)->get();
+        }
+
+        $formattedProducts = [];
+
+        $products = Product::all();
+
+        foreach ($products as $product) {
+            $formattedProducts[] =
+                [
                     'id' => $product->id_product,
                     'title' => $product->title,
                     'price' => $product->price,
@@ -65,9 +76,12 @@ class ProductController extends Controller
                         'rate' => $product->rate,
                         'count' => $product->count,
                     ]
-                ]
-            ], 200);
+                ];
         }
+
+        return response()->json([
+            'data' => $formattedProducts
+        ], 200);
     }
 
     public function getId(string $id)
